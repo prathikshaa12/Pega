@@ -1,0 +1,28 @@
+@baseclass EvaluateLoan {
+    // Step 1: Get LoanAmount and CustomerIncome
+    Property-Set
+        .LoanAmount = Param.LoanAmount
+        .CustomerIncome = Param.CustomerIncome
+
+    // Step 2: Check Loan Eligibility
+    Branch-If
+        .CustomerIncome >= 50000
+            Set .LoanStatus = "Eligible"
+        Otherwise
+            Set .LoanStatus = "Not Eligible"
+    
+    // Step 3: Check Credit Score
+    Branch-If
+        .CreditScore >= 700 AND .LoanStatus == "Eligible"
+            Set .LoanStatus = "Approved"
+        Otherwise
+            Set .LoanStatus = "Rejected"
+    
+    // Step 4: Update Case Status
+    Obj-Save
+        .LoanApproval.LoanStatus = .LoanStatus
+        WriteNow = true
+    
+    // Step 5: Exit Activity
+    Activity-End
+}
